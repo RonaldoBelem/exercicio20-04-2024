@@ -1,0 +1,37 @@
+-- Criar o banco de dados
+CREATE DATABASE Loja;
+
+-- Usar o banco de dados criado
+USE Loja;
+
+-- Criar tabela para cadastro de clientes
+CREATE TABLE Clientes (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    Nome VARCHAR(100),
+    DataCadastro DATE
+);
+
+-- Criar tabela para controle de vendas de produtos
+CREATE TABLE Vendas (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    ClienteID INT,
+    Produto VARCHAR(100),
+    Quantidade INT,
+    DataVenda DATE,
+    FOREIGN KEY (ClienteID) REFERENCES Clientes(ID)
+);
+
+-- Função para somar todos os clientes cadastrados em um dia específico
+DELIMITER $$
+CREATE FUNCTION SomarClientesCadastrados(dataSelecionada DATE)
+RETURNS INT
+BEGIN
+    DECLARE totalClientes INT;
+    
+    SELECT COUNT(*) INTO totalClientes
+    FROM Clientes
+    WHERE DataCadastro = dataSelecionada;
+    
+    RETURN totalClientes;
+END$$
+DELIMITER ;
